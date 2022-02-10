@@ -8,9 +8,15 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
 
     def parse(self, response):
         print('===================================')
-        # print(response.css('a[href*=zukan]::attr(href)').getall())
-        # TODO: ulのzukan_imgを指定できたら良さそう
-        # ul指定して取ってからforで回す？
-        # print(response.xpath('//ul[@class="zukan_img"]/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
-        print(response.xpath('//ul[@class="ul2"]/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        # これだといらんやつもとれちゃう
+        # print(response.xpath('//ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="content_in"]/div[3]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="content_in"]/div[5]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="content_in"]/div[7]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="content_in"]/div[9]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        # TODO: 2桁から取れない
+        print(response.xpath('//*[@id="content_in"]/div[11]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="content_in"]/div[13]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="content_in"]/div[15]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="content_in"]/div[17]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
         pass
