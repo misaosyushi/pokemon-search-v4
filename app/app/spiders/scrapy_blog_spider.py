@@ -8,15 +8,12 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
 
     def parse(self, response):
         print('===================================')
-        # これだといらんやつもとれちゃう
-        # print(response.xpath('//ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
-        print(response.xpath('//*[@id="content_in"]/div[3]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
-        print(response.xpath('//*[@id="content_in"]/div[5]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
-        print(response.xpath('//*[@id="content_in"]/div[7]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
-        print(response.xpath('//*[@id="content_in"]/div[9]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
-        # TODO: 2桁から取れない
-        print(response.xpath('//*[@id="content_in"]/div[11]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
-        print(response.xpath('//*[@id="content_in"]/div[13]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
-        print(response.xpath('//*[@id="content_in"]/div[15]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
-        print(response.xpath('//*[@id="content_in"]/div[17]/ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="c01"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="c02"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="c03"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="c04"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="c05"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="c06"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="c07"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
+        print(response.xpath('//*[@id="c08"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
         pass
