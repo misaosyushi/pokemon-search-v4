@@ -6,7 +6,7 @@
 import scrapy
 
 
-class AppItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
+class PokemonItem(scrapy.Item):
+    # TODO: 他のフィールド追加
+    name = scrapy.Field()
     pass
