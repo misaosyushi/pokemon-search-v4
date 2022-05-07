@@ -3,13 +3,25 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
-import scrapy
+from scrapy import Item, Field
 
 
-class PokemonItem(scrapy.Item):
-    # TODO: 他のフィールド追加
-    name = scrapy.Field()
-    types = scrapy.Field()
-    height = scrapy.Field()
-    weight = scrapy.Field()
-    pass
+class PokemonItem(Item):
+    name = Field()
+    species = Field()
+    types = Field()
+    height = Field()
+    weight = Field()
+    ability = Field()
+    hidden_ability = Field()
+    base_stats = Field()
+
+
+class BaseStatsItem(Item):
+    hp = Field()
+    attack = Field()
+    defense = Field()
+    sp_attack = Field()
+    sp_defense = Field()
+    speed = Field()
+    total = Field()
