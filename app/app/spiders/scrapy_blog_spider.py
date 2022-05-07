@@ -1,7 +1,7 @@
 import scrapy
 
 
-from ..items import PokemonItem, AbilityItem
+from ..items import PokemonItem, AbilityItem, BaseStatsItem
 
 
 class ScrapyBlogSpiderSpider(scrapy.Spider):
@@ -46,4 +46,15 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
         hidden_ability['name'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[12]/td[1]/text()').get()
         hidden_ability['description'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[12]/td[2]/text()').get()
         pokemon['hidden_ability'] = [dict(hidden_ability)]
+
+        base_stats: BaseStatsItem = BaseStatsItem()
+        base_stats['hp'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[4]/td[1]/table/tbody/tr[1]/td[2]/text()').get()
+        base_stats['attack'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[4]/td[1]/table/tbody/tr[2]/td[2]/text()').get()
+        base_stats['defense'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[4]/td[1]/table/tbody/tr[3]/td[2]/text()').get()
+        base_stats['sp_attack'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[4]/td[1]/table/tbody/tr[4]/td[2]/text()').get()
+        base_stats['sp_defense'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[4]/td[1]/table/tbody/tr[5]/td[2]/text()').get()
+        base_stats['speed'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[4]/td[1]/table/tbody/tr[6]/td[2]/text()').get()
+        base_stats['total'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[4]/td[1]/table/tbody/tr[7]/td[2]/text()').get()
+        pokemon['base_stats'] = [dict(base_stats)]
+
         yield pokemon
