@@ -10,7 +10,6 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
     start_urls = ['http://pente.koro-pokemon.com/zukan/']
 
     def parse(self, response):
-        print('===================================')
         # print(response.xpath('//*[@id="c01"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
         # print(response.xpath('//*[@id="c02"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
         # print(response.xpath('//*[@id="c03"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
@@ -19,13 +18,13 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
         # print(response.xpath('//*[@id="c06"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
         # print(response.xpath('//*[@id="c07"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
         # print(response.xpath('//*[@id="c08"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
-        next_page = response.xpath('//*[@id="c01"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').extract_first()
+        # TODO: get_all()でlistにいれるところから
         # https://qiita.com/watame/items/f71a8ad93bce9b8d12ab
+        next_page = response.xpath('//*[@id="c01"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').extract_first()
         request = scrapy.Request(response.urljoin(next_page), callback=self.get_detail)
         yield request
 
     def get_detail(self, response):
-        # TODO: ポケモンリストに突っ込んでいく？
         # item = response.meta['item']
         pokemon: PokemonItem = PokemonItem()
         pokemon['type'] = {}
