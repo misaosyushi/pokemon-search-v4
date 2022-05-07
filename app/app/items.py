@@ -9,12 +9,17 @@ from scrapy import Item, Field
 class PokemonItem(Item):
     name = Field()
     species = Field()
-    types = Field()
+    type = Field()
     height = Field()
     weight = Field()
     ability = Field()
     hidden_ability = Field()
     base_stats = Field()
+
+
+class AbilityItem(Item):
+    name = Field()
+    description = Field()
 
 
 class BaseStatsItem(Item):

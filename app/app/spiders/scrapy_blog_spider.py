@@ -1,7 +1,7 @@
 import scrapy
 
 
-from ..items import PokemonItem
+from ..items import PokemonItem, AbilityItem
 
 
 class ScrapyBlogSpiderSpider(scrapy.Spider):
@@ -26,9 +26,24 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
 
     def get_detail(self, response):
         # TODO: ポケモンリストに突っ込んでいく？
-        item: PokemonItem = PokemonItem()
-        item['types'] = {}
         # item = response.meta['item']
-        item['name'] = response.xpath('//*[@id="main"]/h1/text()').extract_first()
-        item['types'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[2]/child::a/child::span/text()').getall()
-        yield item
+        pokemon: PokemonItem = PokemonItem()
+        pokemon['type'] = {}
+        pokemon['name'] = response.xpath('//*[@id="main"]/h1/text()').extract_first()
+        pokemon['species'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[2]/text()[1]').get().split(': ')[1]
+        pokemon['type'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[2]/child::a/child::span/text()').getall()
+        pokemon['height'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[2]/text()[3]').get().split(': ')[1]
+        pokemon['weight'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[2]/text()[4]').get().split(': ')[1]
+
+        ability: AbilityItem = AbilityItem()
+        # TODO: 複数とれるようにする、親のtrを指定して取ってくる
+        ability['name'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[10]/td[1]/text()').get()
+        ability['description'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[10]/td[2]/text()').get()
+        pokemon['ability'] = [dict(ability)]
+
+        hidden_ability: AbilityItem = AbilityItem()
+        # TODO: 複数とれるようにする、親のtrを指定して取ってくる
+        hidden_ability['name'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[12]/td[1]/text()').get()
+        hidden_ability['description'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[12]/td[2]/text()').get()
+        pokemon['hidden_ability'] = [dict(hidden_ability)]
+        yield pokemon
