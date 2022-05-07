@@ -9,4 +9,7 @@ import scrapy
 class PokemonItem(scrapy.Item):
     # TODO: 他のフィールド追加
     name = scrapy.Field()
+    types = scrapy.Field()
+    height = scrapy.Field()
+    weight = scrapy.Field()
     pass
