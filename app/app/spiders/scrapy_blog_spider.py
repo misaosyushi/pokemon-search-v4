@@ -20,8 +20,9 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
         # print(response.xpath('//*[@id="c08"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall())
         # TODO: get_all()でlistにいれるところから
         # https://qiita.com/watame/items/f71a8ad93bce9b8d12ab
-        next_page = response.xpath('//*[@id="c01"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').extract_first()
-        request = scrapy.Request(response.urljoin(next_page), callback=self.get_detail)
+        request = scrapy.Request(response.urljoin('../zukan/swordshield/toxtricity.shtml'), callback=self.get_detail)
+        # for page in response.xpath('//*[@id="c08"]/parent::h2/following::ul/li/a[contains(@href, "zukan") and contains(@href, "shtml")]/@href').getall():
+        #     request = scrapy.Request(response.urljoin(page), callback=self.get_detail)
         yield request
 
     def get_detail(self, response):
@@ -29,10 +30,10 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
         pokemon: PokemonItem = PokemonItem()
         pokemon['type'] = {}
         pokemon['name'] = response.xpath('//*[@id="main"]/h1/text()').extract_first()
-        pokemon['species'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[2]/text()[1]').get().split(': ')[1]
+        pokemon['species'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[contains(@class, "typec")]/text()[1]').get().split(': ')[1]
         pokemon['type'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[2]/child::a/child::span/text()').getall()
-        pokemon['height'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[2]/text()[3]').get().split(': ')[1]
-        pokemon['weight'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[2]/text()[4]').get().split(': ')[1]
+        pokemon['height'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[contains(@class, "typec")]/text()[3]').get().split(': ')[1]
+        pokemon['weight'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[contains(@class, "typec")]/text()[4]').get().split(': ')[1]
 
         ability: AbilityItem = AbilityItem()
         # TODO: 複数とれるようにする、親のtrを指定して取ってくる
