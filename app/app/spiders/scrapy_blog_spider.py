@@ -31,14 +31,17 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
         pokemon['type'] = {}
         pokemon['name'] = response.xpath('//*[@id="main"]/h1/text()').extract_first()
         pokemon['species'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[contains(@class, "typec")]/text()[1]').get().split(': ')[1]
-        pokemon['type'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[2]/child::a/child::span/text()').getall()
+        pokemon['type'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[contains(@class, "typec")]/child::a/child::span/text()').getall()
         pokemon['height'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[contains(@class, "typec")]/text()[3]').get().split(': ')[1]
         pokemon['weight'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[contains(@class, "typec")]/text()[4]').get().split(': ')[1]
 
         ability: AbilityItem = AbilityItem()
-        # TODO: 複数とれるようにする、親のtrを指定して取ってくる
-        ability['name'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[10]/td[1]/text()').get()
-        ability['description'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[10]/td[2]/text()').get()
+        # TODO: nameとdescriptionはzipする
+        ability['name'] = {}
+        ability['description'] = {}
+        # TODO: これだと夢特性も取ってきちゃう
+        ability['name'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr/th/a[text() = "特性" and not(text() = "隠れ特性 (夢特性)")]/following::td[contains(@class, "wsm121414m")]/text()').getall()
+        ability['description'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[10]/td[2]/text()').getall()
         pokemon['ability'] = [dict(ability)]
 
         hidden_ability: AbilityItem = AbilityItem()
