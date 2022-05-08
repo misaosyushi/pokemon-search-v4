@@ -37,6 +37,7 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
 
         ability: AbilityItem = AbilityItem()
         # TODO: nameとdescriptionはzipする
+        # TODO: 特性、夢特性とかの文字列変数にする
         ability['name'] = {}
         ability['description'] = {}
         # TODO: これだと夢特性も取ってきちゃう
