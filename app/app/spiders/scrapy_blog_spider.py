@@ -44,11 +44,9 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
         ability['description'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[10]/td[2]/text()').getall()
         pokemon['ability'] = [dict(ability)]
 
-        hidden_ability: AbilityItem = AbilityItem()
-        # TODO: 複数とれるようにする、親のtrを指定して取ってくる
-        hidden_ability['name'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[12]/td[1]/text()').get()
-        hidden_ability['description'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[12]/td[2]/text()').get()
-        pokemon['hidden_ability'] = [dict(hidden_ability)]
+        hidden_ability_names = response.xpath('//*[@id="col1"]/table[1]/tbody/tr/th/a[text() = "隠れ特性 (夢特性)"]/following::td[contains(@class, "wsm121414m")]/text()').getall()
+        hidden_ability_descriptions = response.xpath('//*[@id="col1"]/table[1]/tbody/tr/th/a[text() = "隠れ特性 (夢特性)"]/following::td[2]/text()').getall()
+        pokemon['hidden_ability'] = [dict(zip(hidden_ability_names, hidden_ability_descriptions))]
 
         base_stats: BaseStatsItem = BaseStatsItem()
         base_stats['hp'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[4]/td[1]/table/tbody/tr[1]/td[2]/text()').get()
