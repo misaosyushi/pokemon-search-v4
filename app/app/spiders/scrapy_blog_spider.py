@@ -1,7 +1,8 @@
 import scrapy
+import json
 
 
-from ..items import PokemonItem, AbilityItem, BaseStatsItem
+from ..items import PokemonItem, BaseStatsItem
 
 
 class ScrapyBlogSpiderSpider(scrapy.Spider):
@@ -35,19 +36,20 @@ class ScrapyBlogSpiderSpider(scrapy.Spider):
         pokemon['height'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[contains(@class, "typec")]/text()[3]').get().split(': ')[1]
         pokemon['weight'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[2]/td/table/tbody/tr/td[contains(@class, "typec")]/text()[4]').get().split(': ')[1]
 
-        ability: AbilityItem = AbilityItem()
-        # TODO: nameとdescriptionはzipする
-        # TODO: 特性、夢特性とかの文字列変数にする
-        ability['name'] = {}
-        ability['description'] = {}
-        # TODO: これだと夢特性も取ってきちゃう
-        ability['name'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr/th/a[text() = "特性" and not(text() = "隠れ特性 (夢特性)")]/following::td[contains(@class, "wsm121414m")]/text()').getall()
-        ability['description'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[10]/td[2]/text()').getall()
-        pokemon['ability'] = [dict(ability)]
+        ability_str = '特性'
+        hidden_ability_str = '隠れ特性 (夢特性)'
+        # この時点では夢特性も含まれる
+        ability_names = response.xpath(f'//*[@id="col1"]/table[1]/tbody/tr/th/a[text() = "{ability_str}"]/following::td[contains(@class, "wsm121414m")]/text()').getall()
+        ability_descriptions = response.xpath(f'//*[@id="col1"]/table[1]/tbody/tr/th/a[text() = "{ability_str}"]/following::td[contains(@class, "f2")]/text()').getall()
+        ability_dict_tmp = dict(zip(ability_names, ability_descriptions))
 
-        hidden_ability_names = response.xpath('//*[@id="col1"]/table[1]/tbody/tr/th/a[text() = "隠れ特性 (夢特性)"]/following::td[contains(@class, "wsm121414m")]/text()').getall()
-        hidden_ability_descriptions = response.xpath('//*[@id="col1"]/table[1]/tbody/tr/th/a[text() = "隠れ特性 (夢特性)"]/following::td[2]/text()').getall()
-        pokemon['hidden_ability'] = [dict(zip(hidden_ability_names, hidden_ability_descriptions))]
+        hidden_ability_names = response.xpath(f'//*[@id="col1"]/table[1]/tbody/tr/th/a[text() = "{hidden_ability_str}"]/following::td[contains(@class, "wsm121414m")]/text()').getall()
+        hidden_ability_descriptions = response.xpath(f'//*[@id="col1"]/table[1]/tbody/tr/th/a[text() = "{hidden_ability_str}"]/following::td[2]/text()').getall()
+        hidden_ability_dict_tmp = dict(zip(hidden_ability_names, hidden_ability_descriptions))
+
+        # TODO: 重複を除外して特性だけのlistを作成する
+        pokemon['ability'] = [ability_dict_tmp]
+        pokemon['hidden_ability'] = [hidden_ability_dict_tmp]
 
         base_stats: BaseStatsItem = BaseStatsItem()
         base_stats['hp'] = response.xpath('//*[@id="col1"]/table[1]/tbody/tr[4]/td[1]/table/tbody/tr[1]/td[2]/text()').get()

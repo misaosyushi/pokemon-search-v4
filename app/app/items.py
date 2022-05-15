@@ -17,11 +17,6 @@ class PokemonItem(Item):
     base_stats = Field()
 
 
-class AbilityItem(Item):
-    name = Field()
-    description = Field()
-
-
 class BaseStatsItem(Item):
     hp = Field()
     attack = Field()
